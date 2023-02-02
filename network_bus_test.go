@@ -140,13 +140,19 @@ func Test_Network(t *testing.T) {
 	clientBus := NewClient(":2045", "/_client_bus_", New())
 	clientBus.Start()
 
-	// 事件
+	// 事件: 服务器推送客户端消费
 	clientBus.Subscribe("event", func(a int) {
 		fmt.Printf("[sub] %d \n", a)
 	}, ":2040", "/_server_bus_")
 	serverBus.EventBus().Publish("event", 10)
 
-	// 查询
+	// 事件: 客户端推送服务器消费 (编译不通过)
+	// serverBus.Subscribe("event", func(a int) {
+	// 	fmt.Printf("[sub] %d \n", a)
+	// }, ":2045", "/_client_bus_")
+	// clientBus.EventBus().Publish("event", 10)
+
+	// 查询 panic 指针类型
 	clientBus.Subscribe("query", func(result *int) {
 		*result = 10
 		return
@@ -160,11 +166,56 @@ func Test_Network(t *testing.T) {
 }
 
 func Test_Network2(t *testing.T) {
-	serverA := NewServer(":2050", "/_server_bus_A", New())
-	serverA.Start()
-	serverB := NewServer(":2055", "/_server_bus_B", New())
-	serverB.Start()
+	var (
+		netAAddr = ":2050"
+		netAPath = "/_net_bus_A"
+		netBAddr = ":2055"
+		netBPath = "/_net_bus_B"
+	)
 
-	// serverA 注册
+	fmt.Printf("Start\n")
 
+	netA := NewNetworkBus(netAAddr, netAPath)
+	netA.Start()
+	netB := NewNetworkBus(netBAddr, netBPath)
+	netB.Start()
+
+	// netA 推送 netB 消费
+	netB.Subscribe("event1", func(a int) {
+		fmt.Printf("[netA 推送 netB 消费] %d \n", a)
+	}, netAAddr, netAPath)
+	netA.EventBus().Publish("event1", 10)
+
+	// netB 推送 netA 消费
+	netA.Subscribe("event2", func(a int) {
+		fmt.Printf("[netB 推送 netA 消费] %d \n", a)
+	}, netBAddr, netBPath)
+	netB.EventBus().Publish("event2", 10)
+
+	// netA 推送 netA 本地消费
+	netA.EventBus().Subscribe("event3", func(a int) {
+		fmt.Printf("[netA 推送 netA 本地消费] %d \n", a)
+	})
+	netA.EventBus().Publish("event3", 10)
+
+	// netA 推送 netA 本地查询
+	netA.EventBus().Subscribe("query1", func(result *int) {
+		*result = 10
+		return
+	})
+	var result int
+	netA.EventBus().Publish("query1", &result)
+	fmt.Printf("[netA 推送 netA 本地查询] %d \n", result)
+
+	// netA 推送 netB 查询 panic
+	// netB.Subscribe("query2", func(result *int) {
+	// 	*result = 10
+	// 	return
+	// }, netAAddr, netAPath)
+	// var result2 int
+	// netA.EventBus().Publish("query2", &result2)
+	// fmt.Printf("[netA 推送 netB 查询] %d \n", result2)
+
+	netA.Stop()
+	netB.Stop()
 }
