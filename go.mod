@@ -1,3 +1,3 @@
-module github.com/jarvanstack/gitbook-summary
+module github.com/jarvanstack/evbus
 
 go 1.18
