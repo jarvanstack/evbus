@@ -7,7 +7,7 @@ Package evbus is the little and lightweight eventbus with async compatibility fo
 Make sure that Go is installed on your computer.
 Type the following command in your terminal:
 
-	go get github.com/dengjiawen8955/evbus
+	go get github.com/jarvanstack/evbus
 
 After it the package is ready to use.
 
@@ -16,14 +16,14 @@ After it the package is ready to use.
 Add following line in your `*.go` file:
 
 ```go
-import "github.com/dengjiawen8955/evbus"
+import "github.com/jarvanstack/evbus"
 ```
 
 If you unhappy to use long `evbus`, you can do something like this:
 
 ```go
 import (
-	evbus "github.com/dengjiawen8955/evbus"
+	evbus "github.com/jarvanstack/evbus"
 )
 ```
 
@@ -217,14 +217,14 @@ func main() {
 
 ## Notes
 
-Documentation is available here: [godoc.org](https://godoc.org/github.com/dengjiawen8955/evbus).
-Full information about code coverage is also available here: [evbus on gocover.io](http://gocover.io/github.com/dengjiawen8955/evbus).
+Documentation is available here: [godoc.org](https://godoc.org/github.com/jarvanstack/evbus).
+Full information about code coverage is also available here: [evbus on gocover.io](http://gocover.io/github.com/jarvanstack/evbus).
 
 ## Support
 
 If you do have a contribution for the package feel free to put up a Pull Request or open Issue.
 
-## Special thanks to [contributors](https://github.com/dengjiawen8955/evbus/graphs/contributors)
+## Special thanks to [contributors](https://github.com/jarvanstack/evbus/graphs/contributors)
 
 * [Brian Downs](https://github.com/briandowns)
 * [Dominik Schulz](https://github.com/gittex)
