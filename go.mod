@@ -1,3 +1,3 @@
-module github.com/dengjiawen8955/evbus
+module github.com/jarvanstack/evbus
 
 go 1.18
